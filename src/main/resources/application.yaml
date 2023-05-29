@@ -1,2 +1,19 @@
 server:
   port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo?createDatabaseIfNotExist=true&useSSL=false&serverTimeZone=Europe/Rome&autoReconnect=true
+    username: root
+    password: Alwyn1995
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    database: mysql
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        storage_engine: innodb

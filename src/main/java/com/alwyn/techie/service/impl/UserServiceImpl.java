@@ -1,9 +1,9 @@
 package com.alwyn.techie.service.impl;
 
+import com.alwyn.techie.dto.UserUpdateRecord;
 import com.alwyn.techie.model.User;
+import com.alwyn.techie.repository.UserRepository;
 import com.alwyn.techie.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,9 +13,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public User getUserById(String id) {
-        return getUsers().stream().filter(user1 -> user1.getId().equals(id)).findFirst().orElse(null);
+
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -25,16 +33,31 @@ public class UserServiceImpl implements UserService {
         if(user == null){
             throw new RuntimeException(String.format("User with id %s not found", id));
         }
+        userRepository.delete(user);
     }
 
     @Override
     public User createUser(User user) {
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
-    public User updateUser(String id, User user) {
-        return user;
+    public UserUpdateRecord updateUser(String id, UserUpdateRecord userUpdateRecord) {
+        User user = getUserById(id);
+        if(user == null){
+            throw new RuntimeException(String.format("User with id %s not found", id));
+        }
+        user.setFirstName(userUpdateRecord.firstName());
+        user.setLastName(userUpdateRecord.lastName());
+        user.setAge(userUpdateRecord.age());
+
+        User saved = userRepository.save(user);
+
+        return new UserUpdateRecord(
+                saved.getFirstName(),
+                saved.getLastName(),
+                saved.getAge(),
+                saved.getId());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.alwyn.techie.controller;
 
+import com.alwyn.techie.dto.UserUpdateRecord;
 import com.alwyn.techie.model.User;
 import com.alwyn.techie.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -42,11 +43,9 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user){
+    public ResponseEntity<UserUpdateRecord> updateUser(@PathVariable("id") String id, @RequestBody UserUpdateRecord userUpdateRecord){
 
-        //first find record by id
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(id, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(id, userUpdateRecord));
     }
 
     @GetMapping(value = "/search-by-first-name", produces = {MediaType.APPLICATION_JSON_VALUE} )
