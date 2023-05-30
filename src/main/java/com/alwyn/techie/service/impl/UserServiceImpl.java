@@ -1,6 +1,7 @@
 package com.alwyn.techie.service.impl;
 
 import com.alwyn.techie.dto.UserUpdateRecord;
+import com.alwyn.techie.exception.NotFoundException;
 import com.alwyn.techie.model.User;
 import com.alwyn.techie.repository.UserRepository;
 import com.alwyn.techie.service.UserService;
@@ -30,8 +31,9 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(String id) {
 
         User user = getUserById(id);
+
         if(user == null){
-            throw new RuntimeException(String.format("User with id %s not found", id));
+            throw new NotFoundException(String.format("User with id %s does not exist", id));
         }
         userRepository.delete(user);
     }
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
     public UserUpdateRecord updateUser(String id, UserUpdateRecord userUpdateRecord) {
         User user = getUserById(id);
         if(user == null){
-            throw new RuntimeException(String.format("User with id %s not found", id));
+            throw new NotFoundException(String.format("User with id %s does not exist", id));
         }
         user.setFirstName(userUpdateRecord.firstName());
         user.setLastName(userUpdateRecord.lastName());
